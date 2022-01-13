@@ -1,83 +1,130 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
+  <div>
+    <v-sheet color="rgba(33, 99, 232, 0.1)" class="d-flex align-center justify-start pa-1 rounded-8">
+      <div class="d-flex align-center justify-start">
+        <div>
+          <v-chip
+            small
+            label
+            color="indigo"
+            text-color="white"
+            class="mr-4"
+          >
+            Trending:
+          </v-chip>
+        </div>
+        <v-carousel
+          cycle
+          height="100%"
+          hide-delimiters
+          hide-delimiter-background
+          :show-arrows="false"
+        >
+          <div class="d-flex align-center justify-start">
+            <v-carousel-item
+              v-for="(slide, i) in slides"
+              :key="i"
             >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
+              {{ slide }} Slide dfadsaf fdsafasfdsf ffasfweffdafda dfadwerwrwerewferererere
+            </v-carousel-item>
           </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
+          <v-btn slot="prev" icon>
+            mdi-account-multiple-outline
           </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+          <v-btn slot="next" icon>
+            mdi-account-multiple-outline
+          </v-btn>
+        </v-carousel>
+      </div>
+    </v-sheet>
+    <!-- <v-carousel
+      cycle
+      height="32"
+      hide-delimiters
+      hide-delimiter-background
+      :show-arrows="false"
+      class="rounded-8"
+    >
+      <v-carousel-item
+        v-for="(slide, i) in slides"
+        :key="i"
+        eager
+      >
+        <v-sheet color="rgba(33, 99, 232, 0.1)" class="d-flex align-center justify-space-between pa-1">
+          <div class="d-flex align-center justify-start">
+            <v-chip
+              small
+              label
+              color="indigo"
+              text-color="white"
+              class="mr-2"
+            >
+              Trending:
+            </v-chip>
+            <span>{{ slide }} Slide</span>
+          </div>
+          <div>
+            right
+          </div>
+        </v-sheet>
+      </v-carousel-item>
+    </v-carousel> -->
+    <span>12</span>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'IndexPage'
+  name: 'IndexPage',
+  data: () => ({
+    isMobile: false,
+    dialog: false,
+    colors: [
+      'indigo',
+      'warning',
+      'pink darken-2',
+      'red lighten-1',
+      'deep-purple accent-4'
+    ],
+    slides: [
+      'First',
+      'Second',
+      'Third',
+      'Fourth',
+      'Fifth'
+    ]
+  }),
+  computed: {
+    theme () {
+      return this.$vuetify.theme.isDark ? 'dark' : 'light'
+    }
+  },
+  mounted () {
+    this.onResize()
+    window.addEventListener('resize', this.onResize, { passive: true })
+  },
+  beforeDestroy () {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('resize', this.onResize, { passive: true })
+    }
+  },
+  methods: {
+    touchAll () {
+      const value = this.$vuetify.theme.themes[this.theme]
+      this.$vuetify.theme.themes[this.theme] = {}
+      this.$vuetify.theme.themes[this.theme] = value
+    },
+
+    swap () {
+      this.$vuetify.theme.isDark = !this.$vuetify.theme.isDark
+
+      // necessary to reset colors after changing the theme, perhaps a Vuetify.js bug
+      this.touchAll(1)
+    },
+
+    onResize () {
+      this.isMobile = window.innerWidth < 600
+    }
+  }
 }
 </script>
